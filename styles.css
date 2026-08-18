@@ -1,379 +1,70 @@
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#000}
+body{font-family:Arial,Helvetica,sans-serif}
+.cinema{position:relative;width:100%;height:100%;background:#000}
+.player{position:absolute;inset:0;display:grid;place-items:center;background:#000}
+.video-shell{position:relative;width:100%;height:100%;overflow:hidden;background:#000}
+video{width:100%;height:100%;display:block;object-fit:contain;background:#000}
+.video-placeholder{position:absolute;inset:0;display:grid;place-content:center;text-align:center;background:#050505;color:#fff}
+.placeholder-label{font-size:clamp(22px,4vw,54px);font-weight:800;letter-spacing:-.04em}
+.placeholder-status{margin-top:8px;font:11px "Courier New",monospace;letter-spacing:.25em;opacity:.45}
+.player-ui{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:24px;color:#fff;opacity:0;transition:opacity 250ms ease;pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,.5),transparent 25%),linear-gradient(to top,rgba(0,0,0,.7),transparent 30%)}
+.player:hover .player-ui{opacity:1}
+.player-top{font:700 10px "Courier New",monospace;letter-spacing:.18em}
+.live-dot{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:50%;background:#f22}
+.player-bottom{width:100%}
+.progress{height:2px;width:100%;margin-bottom:12px;background:rgba(255,255,255,.25)}
+.progress span{display:block;width:0;height:100%;background:#fff}
+.controls{display:flex;align-items:center;gap:12px;font:11px "Courier New",monospace}
+.controls button{border:0;padding:0;color:#fff;background:none;font-size:15px;cursor:pointer}
+.spacer{flex:1}
+
+.intro{position:absolute;inset:0;z-index:10;display:grid;place-items:center;background:#fff;transform-origin:center}
+.logo-wrap{position:relative;width:min(30vw,290px);aspect-ratio:430/335;animation:breathing-h 1.9s ease-in-out infinite}
+.animated-fill,.logo-outline,.scanlines,.film-flicker{position:absolute;inset:0;width:100%;height:100%}
+.animated-fill{
+  z-index:2;
+  background:#F4E429;
+  -webkit-mask:url("assets/cineclub-h-fill-mask.png") center/100% 100% no-repeat;
+  mask:url("assets/cineclub-h-fill-mask.png") center/100% 100% no-repeat;
+  animation:signal-cycle 8s steps(1,end) infinite;
 }
+.logo-outline{z-index:4;object-fit:contain;pointer-events:none}
+.scanlines{z-index:5;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.13) 0,rgba(0,0,0,.13) 1px,transparent 1px,transparent 4px);mix-blend-mode:multiply;opacity:.28}
+.film-flicker{z-index:6;pointer-events:none;animation:film-flicker 240ms steps(2,end) infinite}
 
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  overflow: hidden;
-  background: #000;
-}
+@keyframes breathing-h{0%,100%{transform:scale(.96)}50%{transform:scale(1.04)}}
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.cinema {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: #000;
-}
-
-.player {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  background: #000;
-}
-
-.video-shell {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #000;
-}
-
-video {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: contain;
-  background: #000;
-}
-
-.video-placeholder {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-content: center;
-  text-align: center;
-  background: #050505;
-  color: white;
-}
-
-.placeholder-label {
-  font-size: clamp(22px, 4vw, 54px);
-  font-weight: 800;
-  letter-spacing: -.04em;
-}
-
-.placeholder-status {
-  margin-top: 8px;
-  font: 11px "Courier New", monospace;
-  letter-spacing: .25em;
-  opacity: .45;
-}
-
-.player-ui {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 24px;
-  color: white;
-  opacity: 0;
-  transition: opacity 250ms ease;
-  pointer-events: none;
-  background:
-    linear-gradient(to bottom, rgba(0,0,0,.5), transparent 25%),
-    linear-gradient(to top, rgba(0,0,0,.7), transparent 30%);
-}
-
-.player:hover .player-ui {
-  opacity: 1;
-}
-
-.player-top {
-  font: 700 10px "Courier New", monospace;
-  letter-spacing: .18em;
-}
-
-.live-dot {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-right: 7px;
-  border-radius: 50%;
-  background: #f22;
-}
-
-.player-bottom {
-  width: 100%;
-}
-
-.progress {
-  height: 2px;
-  width: 100%;
-  margin-bottom: 12px;
-  background: rgba(255,255,255,.25);
-}
-
-.progress span {
-  display: block;
-  width: 0;
-  height: 100%;
-  background: white;
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font: 11px "Courier New", monospace;
-}
-
-.controls button {
-  border: 0;
-  padding: 0;
-  color: white;
-  background: none;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-.spacer {
-  flex: 1;
-}
-
-/* LOADING IDENT */
-
-.intro {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  display: grid;
-  place-items: center;
-  background: #fff;
-  transform-origin: center center;
-}
-
-.signal {
-  width: min(100%, 560px);
-  display: grid;
-  place-items: center;
-}
-
-.logo-wrap {
-  position: relative;
-  width: min(30vw, 290px);
-  aspect-ratio: 430 / 335;
-  animation: breathing-h 1.9s ease-in-out infinite;
-}
-
-.logo-wrap img,
-.animated-fill,
-.scanlines,
-.film-flicker {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.logo-wrap img {
-  display: block;
-  object-fit: contain;
-  z-index: 4;
-  pointer-events: none;
-}
-
-.animated-fill {
-  z-index: 2;
-  background: #F4E429;
-  -webkit-mask: url("assets/cineclub-h-fill-mask.png") center / 100% 100% no-repeat;
-  mask: url("assets/cineclub-h-fill-mask.png") center / 100% 100% no-repeat;
-  animation: signal-cycle 8s steps(1, end) infinite;
-}
-
-.scanlines {
-  z-index: 5;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0,0,0,.13) 0,
-    rgba(0,0,0,.13) 1px,
-    transparent 1px,
-    transparent 4px
-  );
-  mix-blend-mode: multiply;
-  opacity: .28;
-}
-
-.film-flicker {
-  z-index: 6;
-  pointer-events: none;
-  background: rgba(255,255,255,0);
-  animation: film-flicker 240ms steps(2,end) infinite;
-}
-
-@keyframes breathing-h {
-  0%, 100% {
-    transform: scale(.96);
+@keyframes signal-cycle{
+  0%,19%{background:#F4E429;filter:none}
+  20%,39%{
+    background:linear-gradient(90deg,#c0c0c0 0 14.28%,#c0c000 14.28% 28.56%,#00c0c0 28.56% 42.84%,#00c000 42.84% 57.12%,#c000c0 57.12% 71.40%,#c00000 71.40% 85.68%,#0000c0 85.68% 100%);
   }
-  50% {
-    transform: scale(1.04);
+  40%,59%{
+    background:repeating-linear-gradient(0deg,#111 0 2px,#eee 2px 4px),repeating-linear-gradient(90deg,#fff 0 1px,#000 1px 3px);
+    background-blend-mode:screen;
+    filter:contrast(2.5);
+  }
+  60%,79%{
+    background:radial-gradient(ellipse at center,#f2f2e9 0 34%,#8d8d84 35% 36%,#202020 37% 100%);
+    filter:contrast(1.35);
+  }
+  80%,100%{
+    background:linear-gradient(90deg,rgba(255,255,255,.13),transparent 18% 82%,rgba(0,0,0,.10)),#F4E429;
   }
 }
 
-@keyframes signal-cycle {
-  /* Exact logo yellow */
-  0%, 19% {
-    background: #F4E429;
-    filter: none;
-  }
+@keyframes film-flicker{0%,88%,100%{opacity:0}89%{opacity:.08}90%{opacity:0}96%{opacity:.035}}
 
-  /* SMPTE-ish bars */
-  20%, 39% {
-    background: linear-gradient(
-      90deg,
-      #c0c0c0 0 14.28%,
-      #c0c000 14.28% 28.56%,
-      #00c0c0 28.56% 42.84%,
-      #00c000 42.84% 57.12%,
-      #c000c0 57.12% 71.40%,
-      #c00000 71.40% 85.68%,
-      #0000c0 85.68% 100%
-    );
-  }
+.loading{position:absolute;left:50%;bottom:13%;transform:translateX(-50%);color:#111;font:700 11px "Courier New",monospace;letter-spacing:.2em;white-space:nowrap}
+.dots{display:inline-block;width:0;overflow:hidden;animation:dots 1s steps(4,end) infinite}
+@keyframes dots{0%{width:0}25%{width:1ch}50%{width:2ch}75%,100%{width:3ch}}
 
-  /* Television snow */
-  40%, 59% {
-    background:
-      repeating-linear-gradient(
-        0deg,
-        #111 0 2px,
-        #eee 2px 4px
-      ),
-      repeating-linear-gradient(
-        90deg,
-        #fff 0 1px,
-        #000 1px 3px
-      );
-    background-blend-mode: screen;
-    filter: contrast(2.5);
-  }
+.intro.reveal{animation:cinematic-reveal 2600ms cubic-bezier(.76,0,.18,1) forwards;pointer-events:none}
+.intro.reveal .logo-wrap{animation:breathing-h 1.9s ease-in-out infinite,logo-pullback 2600ms cubic-bezier(.76,0,.18,1) forwards}
+.intro.reveal .loading{opacity:0;transition:opacity 250ms ease}
+@keyframes cinematic-reveal{0%{clip-path:inset(0);opacity:1}38%{clip-path:inset(6%)}100%{clip-path:inset(50% 50%);opacity:0}}
+@keyframes logo-pullback{0%{transform:scale(1)}50%{transform:scale(.68)}100%{transform:scale(.08);opacity:0}}
 
-  /* Projector / film leader */
-  60%, 79% {
-    background:
-      radial-gradient(
-        ellipse at center,
-        #f2f2e9 0 34%,
-        #8d8d84 35% 36%,
-        #202020 37% 100%
-      );
-    filter: contrast(1.35);
-  }
-
-  /* Back to yellow, with a slight old-film wash */
-  80%, 100% {
-    background:
-      linear-gradient(
-        90deg,
-        rgba(255,255,255,.13),
-        transparent 18% 82%,
-        rgba(0,0,0,.10)
-      ),
-      #F4E429;
-  }
-}
-
-@keyframes film-flicker {
-  0%, 88%, 100% { opacity: 0; }
-  89% { opacity: .08; }
-  90% { opacity: 0; }
-  96% { opacity: .035; }
-}
-
-.loading {
-  position: absolute;
-  left: 50%;
-  bottom: 13%;
-  transform: translateX(-50%);
-  color: #111;
-  font: 700 11px "Courier New", monospace;
-  letter-spacing: .2em;
-  white-space: nowrap;
-}
-
-.dots {
-  display: inline-block;
-  width: 0;
-  overflow: hidden;
-  animation: dots 1s steps(4,end) infinite;
-}
-
-@keyframes dots {
-  0% { width: 0; }
-  25% { width: 1ch; }
-  50% { width: 2ch; }
-  75%, 100% { width: 3ch; }
-}
-
-.intro.reveal {
-  animation: cinematic-reveal 2600ms cubic-bezier(.76,0,.18,1) forwards;
-  pointer-events: none;
-}
-
-.intro.reveal .logo-wrap {
-  animation:
-    breathing-h 1.9s ease-in-out infinite,
-    logo-pullback 2600ms cubic-bezier(.76,0,.18,1) forwards;
-}
-
-.intro.reveal .loading {
-  opacity: 0;
-  transition: opacity 250ms ease;
-}
-
-@keyframes cinematic-reveal {
-  0% {
-    clip-path: inset(0);
-    opacity: 1;
-  }
-  38% {
-    clip-path: inset(6% 6% 6% 6%);
-  }
-  100% {
-    clip-path: inset(50% 50% 50% 50%);
-    opacity: 0;
-  }
-}
-
-@keyframes logo-pullback {
-  0% { transform: scale(1); }
-  50% { transform: scale(.68); }
-  100% {
-    transform: scale(.08);
-    opacity: 0;
-  }
-}
-
-.skip {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  z-index: 20;
-  border: 1px solid rgba(255,255,255,.35);
-  padding: 8px 12px;
-  color: white;
-  background: rgba(0,0,0,.5);
-  font: 10px "Courier New", monospace;
-  letter-spacing: .15em;
-  cursor: pointer;
-  opacity: .55;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .logo-wrap,
-  .animated-fill,
-  .film-flicker,
-  .dots {
-    animation: none;
-  }
-}
+.skip{position:fixed;right:20px;bottom:20px;z-index:20;border:1px solid rgba(255,255,255,.35);padding:8px 12px;color:#fff;background:rgba(0,0,0,.5);font:10px "Courier New",monospace;letter-spacing:.15em;cursor:pointer;opacity:.55}
+@media (prefers-reduced-motion:reduce){.logo-wrap,.animated-fill,.film-flicker,.dots{animation:none}}
