@@ -1,0 +1,297 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --intro-duration: 2600ms;
+  --black: #000;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  overflow: hidden;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.cinema {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+/* -------------------------
+   VIDEO / CINEMA
+------------------------- */
+
+.player {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #000;
+}
+
+.video-shell {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+.video-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  background: #050505;
+  color: #fff;
+}
+
+.placeholder-label {
+  font-size: clamp(22px, 4vw, 54px);
+  font-weight: 800;
+  letter-spacing: -.04em;
+}
+
+.placeholder-status {
+  margin-top: 8px;
+  font: 11px/1 "Courier New", monospace;
+  letter-spacing: .25em;
+  opacity: .45;
+}
+
+.player-ui {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px;
+  color: white;
+  opacity: 0;
+  transition: opacity 250ms ease;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.5), transparent 25%),
+    linear-gradient(to top, rgba(0,0,0,.7), transparent 30%);
+}
+
+.player:hover .player-ui {
+  opacity: 1;
+}
+
+.player-top {
+  font: 700 10px/1 "Courier New", monospace;
+  letter-spacing: .18em;
+}
+
+.live-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: #f22;
+}
+
+.player-bottom {
+  width: 100%;
+}
+
+.progress {
+  width: 100%;
+  height: 2px;
+  margin-bottom: 12px;
+  background: rgba(255,255,255,.25);
+}
+
+.progress span {
+  display: block;
+  width: 0%;
+  height: 100%;
+  background: white;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font: 11px "Courier New", monospace;
+}
+
+.controls button {
+  border: 0;
+  padding: 0;
+  color: white;
+  background: none;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.spacer {
+  flex: 1;
+}
+
+/* -------------------------
+   CINEMA H INTRO
+------------------------- */
+
+.intro {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  transform-origin: center center;
+}
+
+.logo-wrap {
+  position: relative;
+  width: min(43vw, 430px);
+  aspect-ratio: 430 / 335;
+}
+
+.logo-wrap img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,.12) 0,
+    rgba(0,0,0,.12) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  mix-blend-mode: multiply;
+  opacity: .3;
+}
+
+.loading {
+  position: absolute;
+  left: 50%;
+  bottom: 13%;
+  transform: translateX(-50%);
+  color: #111;
+  font: 700 11px/1 "Courier New", monospace;
+  letter-spacing: .2em;
+  white-space: nowrap;
+}
+
+.dots {
+  display: inline-block;
+  width: 0;
+  overflow: hidden;
+  animation: dots 1s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0% { width: 0; }
+  25% { width: 1ch; }
+  50% { width: 2ch; }
+  75%, 100% { width: 3ch; }
+}
+
+/* When JS adds .reveal, the whole white intro zooms outward.
+   The video underneath is revealed in a cinematic "pull back". */
+.intro.reveal {
+  animation: cinematic-reveal var(--intro-duration) cubic-bezier(.76,0,.18,1) forwards;
+  pointer-events: none;
+}
+
+.intro.reveal .logo-wrap {
+  animation: logo-pullback var(--intro-duration) cubic-bezier(.76,0,.18,1) forwards;
+}
+
+.intro.reveal .loading {
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+
+@keyframes cinematic-reveal {
+  0% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+
+  35% {
+    clip-path: inset(7% 7% 7% 7%);
+  }
+
+  100% {
+    clip-path: inset(50% 50% 50% 50%);
+    opacity: 0;
+  }
+}
+
+@keyframes logo-pullback {
+  0% {
+    transform: scale(1);
+  }
+
+  55% {
+    transform: scale(.58);
+  }
+
+  100% {
+    transform: scale(.08);
+    opacity: 0;
+  }
+}
+
+.skip {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 20;
+  border: 1px solid rgba(255,255,255,.35);
+  padding: 8px 12px;
+  color: white;
+  background: rgba(0,0,0,.5);
+  font: 10px "Courier New", monospace;
+  letter-spacing: .15em;
+  cursor: pointer;
+  opacity: .55;
+}
+
+.skip:hover {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro.reveal,
+  .intro.reveal .logo-wrap {
+    animation-duration: 1ms;
+  }
+
+  .dots {
+    animation: none;
+    width: 3ch;
+  }
+}
