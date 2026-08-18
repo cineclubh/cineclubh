@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ffffff">
-  <title>CineClub H</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fff">
+<title>CineClub H</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <main class="cinema">
@@ -32,12 +32,21 @@
   </section>
 
   <section class="intro" id="intro">
-    <div class="logo-wrap">
-      <div class="animated-fill"></div>
-      <img class="logo-outline" src="assets/cineclub-h-outline.png" alt="CineClub H">
-      <div class="scanlines"></div>
-      <div class="film-flicker"></div>
+    <div class="ident">
+      <div class="logo-wrap">
+        <!-- Every fill state is its own layer, allowing elegant crossfades. -->
+        <div class="fill fill-yellow"></div>
+        <div class="fill fill-bars"></div>
+        <div class="fill fill-static"></div>
+        <div class="fill fill-projector"></div>
+
+        <img class="logo-outline" src="assets/cineclub-h-outline.png" alt="CineClub H">
+
+        <div class="crt"></div>
+        <div class="gate"></div>
+      </div>
     </div>
+
     <div class="loading">LOADING<span class="dots">...</span></div>
   </section>
 

@@ -1,70 +1,455 @@
 *{box-sizing:border-box}
-html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#000}
+
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:#000;
+}
+
 body{font-family:Arial,Helvetica,sans-serif}
-.cinema{position:relative;width:100%;height:100%;background:#000}
-.player{position:absolute;inset:0;display:grid;place-items:center;background:#000}
-.video-shell{position:relative;width:100%;height:100%;overflow:hidden;background:#000}
-video{width:100%;height:100%;display:block;object-fit:contain;background:#000}
-.video-placeholder{position:absolute;inset:0;display:grid;place-content:center;text-align:center;background:#050505;color:#fff}
-.placeholder-label{font-size:clamp(22px,4vw,54px);font-weight:800;letter-spacing:-.04em}
-.placeholder-status{margin-top:8px;font:11px "Courier New",monospace;letter-spacing:.25em;opacity:.45}
-.player-ui{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:24px;color:#fff;opacity:0;transition:opacity 250ms ease;pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,.5),transparent 25%),linear-gradient(to top,rgba(0,0,0,.7),transparent 30%)}
+
+.cinema{
+  position:relative;
+  width:100%;
+  height:100%;
+  background:#000;
+}
+
+/* PLAYER */
+
+.player{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  background:#000;
+}
+
+.video-shell{
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#000;
+}
+
+video{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:contain;
+  background:#000;
+}
+
+.video-placeholder{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-content:center;
+  text-align:center;
+  background:#050505;
+  color:#fff;
+}
+
+.placeholder-label{
+  font-size:clamp(22px,4vw,54px);
+  font-weight:800;
+  letter-spacing:-.04em;
+}
+
+.placeholder-status{
+  margin-top:8px;
+  font:11px "Courier New",monospace;
+  letter-spacing:.25em;
+  opacity:.45;
+}
+
+.player-ui{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:24px;
+  color:#fff;
+  opacity:0;
+  transition:opacity 250ms ease;
+  pointer-events:none;
+  background:
+    linear-gradient(to bottom,rgba(0,0,0,.5),transparent 25%),
+    linear-gradient(to top,rgba(0,0,0,.7),transparent 30%);
+}
+
 .player:hover .player-ui{opacity:1}
-.player-top{font:700 10px "Courier New",monospace;letter-spacing:.18em}
-.live-dot{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:50%;background:#f22}
+
+.player-top{
+  font:700 10px "Courier New",monospace;
+  letter-spacing:.18em;
+}
+
+.live-dot{
+  display:inline-block;
+  width:7px;
+  height:7px;
+  margin-right:7px;
+  border-radius:50%;
+  background:#f22;
+}
+
 .player-bottom{width:100%}
-.progress{height:2px;width:100%;margin-bottom:12px;background:rgba(255,255,255,.25)}
-.progress span{display:block;width:0;height:100%;background:#fff}
-.controls{display:flex;align-items:center;gap:12px;font:11px "Courier New",monospace}
-.controls button{border:0;padding:0;color:#fff;background:none;font-size:15px;cursor:pointer}
+
+.progress{
+  height:2px;
+  width:100%;
+  margin-bottom:12px;
+  background:rgba(255,255,255,.25);
+}
+
+.progress span{
+  display:block;
+  width:0;
+  height:100%;
+  background:#fff;
+}
+
+.controls{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font:11px "Courier New",monospace;
+}
+
+.controls button{
+  border:0;
+  padding:0;
+  color:#fff;
+  background:none;
+  font-size:15px;
+  cursor:pointer;
+}
+
 .spacer{flex:1}
 
-.intro{position:absolute;inset:0;z-index:10;display:grid;place-items:center;background:#fff;transform-origin:center}
-.logo-wrap{position:relative;width:min(30vw,290px);aspect-ratio:430/335;animation:breathing-h 1.9s ease-in-out infinite}
-.animated-fill,.logo-outline,.scanlines,.film-flicker{position:absolute;inset:0;width:100%;height:100%}
-.animated-fill{
-  z-index:2;
-  background:#F4E429;
+/* CINEMA IDENT */
+
+.intro{
+  position:absolute;
+  inset:0;
+  z-index:10;
+  display:grid;
+  place-items:center;
+  background:#fff;
+  transform-origin:center;
+}
+
+.ident{
+  width:100%;
+  display:grid;
+  place-items:center;
+}
+
+.logo-wrap{
+  position:relative;
+  width:min(28vw,270px);
+  aspect-ratio:430 / 335;
+  transform:translateZ(0);
+  animation:breath 2.6s cubic-bezier(.45,0,.55,1) infinite;
+}
+
+/*
+  Each visual is independently masked.
+  Crossfading these layers avoids the cheap "instant TV effect"
+  and makes the signal feel like a designed ident.
+*/
+.fill{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
   -webkit-mask:url("assets/cineclub-h-fill-mask.png") center/100% 100% no-repeat;
   mask:url("assets/cineclub-h-fill-mask.png") center/100% 100% no-repeat;
-  animation:signal-cycle 8s steps(1,end) infinite;
-}
-.logo-outline{z-index:4;object-fit:contain;pointer-events:none}
-.scanlines{z-index:5;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.13) 0,rgba(0,0,0,.13) 1px,transparent 1px,transparent 4px);mix-blend-mode:multiply;opacity:.28}
-.film-flicker{z-index:6;pointer-events:none;animation:film-flicker 240ms steps(2,end) infinite}
-
-@keyframes breathing-h{0%,100%{transform:scale(.96)}50%{transform:scale(1.04)}}
-
-@keyframes signal-cycle{
-  0%,19%{background:#F4E429;filter:none}
-  20%,39%{
-    background:linear-gradient(90deg,#c0c0c0 0 14.28%,#c0c000 14.28% 28.56%,#00c0c0 28.56% 42.84%,#00c000 42.84% 57.12%,#c000c0 57.12% 71.40%,#c00000 71.40% 85.68%,#0000c0 85.68% 100%);
-  }
-  40%,59%{
-    background:repeating-linear-gradient(0deg,#111 0 2px,#eee 2px 4px),repeating-linear-gradient(90deg,#fff 0 1px,#000 1px 3px);
-    background-blend-mode:screen;
-    filter:contrast(2.5);
-  }
-  60%,79%{
-    background:radial-gradient(ellipse at center,#f2f2e9 0 34%,#8d8d84 35% 36%,#202020 37% 100%);
-    filter:contrast(1.35);
-  }
-  80%,100%{
-    background:linear-gradient(90deg,rgba(255,255,255,.13),transparent 18% 82%,rgba(0,0,0,.10)),#F4E429;
-  }
+  transform:translateZ(0);
 }
 
-@keyframes film-flicker{0%,88%,100%{opacity:0}89%{opacity:.08}90%{opacity:0}96%{opacity:.035}}
+.fill-yellow{
+  z-index:1;
+  background:#F4E429;
+  animation:yellow-state 12s cubic-bezier(.77,0,.18,1) infinite;
+}
 
-.loading{position:absolute;left:50%;bottom:13%;transform:translateX(-50%);color:#111;font:700 11px "Courier New",monospace;letter-spacing:.2em;white-space:nowrap}
-.dots{display:inline-block;width:0;overflow:hidden;animation:dots 1s steps(4,end) infinite}
-@keyframes dots{0%{width:0}25%{width:1ch}50%{width:2ch}75%,100%{width:3ch}}
+.fill-bars{
+  z-index:2;
+  background:
+    linear-gradient(
+      90deg,
+      #c8c8c8 0 14.285%,
+      #d4d400 14.285% 28.57%,
+      #18b9c6 28.57% 42.855%,
+      #19ad49 42.855% 57.14%,
+      #bd25bd 57.14% 71.425%,
+      #dc2929 71.425% 85.71%,
+      #243bd2 85.71% 100%
+    );
+  animation:bars-state 12s cubic-bezier(.77,0,.18,1) infinite;
+}
 
-.intro.reveal{animation:cinematic-reveal 2600ms cubic-bezier(.76,0,.18,1) forwards;pointer-events:none}
-.intro.reveal .logo-wrap{animation:breathing-h 1.9s ease-in-out infinite,logo-pullback 2600ms cubic-bezier(.76,0,.18,1) forwards}
-.intro.reveal .loading{opacity:0;transition:opacity 250ms ease}
-@keyframes cinematic-reveal{0%{clip-path:inset(0);opacity:1}38%{clip-path:inset(6%)}100%{clip-path:inset(50% 50%);opacity:0}}
-@keyframes logo-pullback{0%{transform:scale(1)}50%{transform:scale(.68)}100%{transform:scale(.08);opacity:0}}
+.fill-bars::after{
+  content:"";
+  position:absolute;
+  inset:-20%;
+  background:
+    linear-gradient(
+      180deg,
+      transparent 0 48%,
+      rgba(255,255,255,.22) 49%,
+      rgba(255,255,255,.22) 50%,
+      transparent 51%
+    );
+  background-size:100% 180px;
+  animation:bars-scan 2.8s linear infinite;
+  mix-blend-mode:screen;
+  opacity:.45;
+}
 
-.skip{position:fixed;right:20px;bottom:20px;z-index:20;border:1px solid rgba(255,255,255,.35);padding:8px 12px;color:#fff;background:rgba(0,0,0,.5);font:10px "Courier New",monospace;letter-spacing:.15em;cursor:pointer;opacity:.55}
-@media (prefers-reduced-motion:reduce){.logo-wrap,.animated-fill,.film-flicker,.dots{animation:none}}
+.fill-static{
+  z-index:3;
+  background:
+    radial-gradient(circle at 15% 30%,#fff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 80% 70%,#111 0 1px,transparent 1.5px),
+    radial-gradient(circle at 45% 55%,#eee 0 1px,transparent 1.5px),
+    #777;
+  background-size:7px 7px,9px 9px,5px 5px,100% 100%;
+  animation:static-state 12s cubic-bezier(.77,0,.18,1) infinite;
+  filter:contrast(1.7) grayscale(1);
+}
+
+.fill-static::after{
+  content:"";
+  position:absolute;
+  inset:-15%;
+  background:repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,.18) 0 1px,
+    transparent 1px 5px
+  );
+  animation:static-drift .55s linear infinite;
+}
+
+.fill-projector{
+  z-index:4;
+  background:
+    radial-gradient(
+      ellipse at 50% 48%,
+      #fffde8 0 26%,
+      #e6dfb5 28%,
+      #8b876e 47%,
+      #24231f 70%,
+      #050505 100%
+    );
+  animation:projector-state 12s cubic-bezier(.77,0,.18,1) infinite;
+}
+
+.fill-projector::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0 48%,
+      rgba(255,255,255,.28) 49%,
+      rgba(255,255,255,.28) 51%,
+      transparent 52%
+    );
+  transform:scaleX(.18);
+  filter:blur(7px);
+  opacity:.7;
+}
+
+.fill-projector::after{
+  content:"";
+  position:absolute;
+  inset:-30%;
+  background:linear-gradient(
+    100deg,
+    transparent 35%,
+    rgba(255,255,230,.24) 48%,
+    transparent 61%
+  );
+  animation:projector-sweep 3.4s ease-in-out infinite;
+  filter:blur(12px);
+}
+
+.logo-outline{
+  position:absolute;
+  inset:0;
+  z-index:7;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  pointer-events:none;
+}
+
+/* Extremely subtle CRT treatment — not a cheesy overlay. */
+.crt{
+  position:absolute;
+  inset:0;
+  z-index:8;
+  pointer-events:none;
+  background:repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,.045) 0,
+    rgba(0,0,0,.045) 1px,
+    transparent 1px,
+    transparent 5px
+  );
+  mix-blend-mode:multiply;
+  opacity:.55;
+}
+
+.gate{
+  position:absolute;
+  inset:-15%;
+  z-index:9;
+  pointer-events:none;
+  background:linear-gradient(
+    90deg,
+    transparent 0 45%,
+    rgba(255,255,255,.08) 50%,
+    transparent 55%
+  );
+  transform:translateX(-110%);
+  animation:gate 5.5s cubic-bezier(.45,0,.55,1) infinite;
+}
+
+@keyframes breath{
+  0%,100%{transform:scale(.985)}
+  50%{transform:scale(1.015)}
+}
+
+/*
+  12-second signal:
+  0-30%   yellow
+  30-52%  bars
+  52-76%  static
+  76-100% projector
+  Each state overlaps the next so there are no hard cuts.
+*/
+@keyframes yellow-state{
+  0%,25%{opacity:1}
+  32%,100%{opacity:0}
+}
+
+@keyframes bars-state{
+  0%,23%{opacity:0}
+  30%,47%{opacity:1}
+  54%,100%{opacity:0}
+}
+
+@keyframes static-state{
+  0%,47%{opacity:0}
+  54%,70%{opacity:1}
+  77%,100%{opacity:0}
+}
+
+@keyframes projector-state{
+  0%,70%{opacity:0}
+  77%,96%{opacity:1}
+  100%{opacity:0}
+}
+
+@keyframes bars-scan{
+  from{transform:translateY(-160px)}
+  to{transform:translateY(160px)}
+}
+
+@keyframes static-drift{
+  from{transform:translateY(-8px)}
+  to{transform:translateY(8px)}
+}
+
+@keyframes projector-sweep{
+  0%,20%{transform:translateX(-35%)}
+  70%,100%{transform:translateX(35%)}
+}
+
+@keyframes gate{
+  0%,45%{transform:translateX(-110%);opacity:0}
+  55%{opacity:1}
+  75%,100%{transform:translateX(110%);opacity:0}
+}
+
+.loading{
+  position:absolute;
+  left:50%;
+  bottom:13%;
+  transform:translateX(-50%);
+  color:#111;
+  font:700 10px "Courier New",monospace;
+  letter-spacing:.24em;
+  white-space:nowrap;
+}
+
+.dots{
+  display:inline-block;
+  width:0;
+  overflow:hidden;
+  animation:dots 1.2s steps(4,end) infinite;
+}
+
+@keyframes dots{
+  0%{width:0}
+  25%{width:1ch}
+  50%{width:2ch}
+  75%,100%{width:3ch}
+}
+
+/* The intro becomes a clean cinematic iris/zoom reveal. */
+.intro.reveal{
+  animation:reveal 2200ms cubic-bezier(.76,0,.18,1) forwards;
+  pointer-events:none;
+}
+
+.intro.reveal .logo-wrap{
+  animation:
+    breath 2.6s cubic-bezier(.45,0,.55,1) infinite,
+    logo-out 2200ms cubic-bezier(.76,0,.18,1) forwards;
+}
+
+.intro.reveal .loading{
+  opacity:0;
+  transition:opacity 180ms ease;
+}
+
+@keyframes reveal{
+  0%{clip-path:inset(0);opacity:1}
+  45%{clip-path:inset(3% 3%)}
+  100%{clip-path:inset(50% 50%);opacity:0}
+}
+
+@keyframes logo-out{
+  0%{transform:scale(1)}
+  55%{transform:scale(.72)}
+  100%{transform:scale(.05);opacity:0}
+}
+
+.skip{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:20;
+  border:1px solid rgba(255,255,255,.3);
+  padding:8px 12px;
+  color:#fff;
+  background:rgba(0,0,0,.5);
+  font:10px "Courier New",monospace;
+  letter-spacing:.15em;
+  cursor:pointer;
+  opacity:.4;
+}
+
+@media (prefers-reduced-motion:reduce){
+  .logo-wrap,.fill,.gate,.dots{animation:none}
+}
