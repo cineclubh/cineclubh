@@ -8,7 +8,6 @@ let revealed = false;
 function revealCinema() {
   if (revealed) return;
   revealed = true;
-
   intro.classList.add("reveal");
 
   window.setTimeout(() => {
@@ -16,9 +15,7 @@ function revealCinema() {
   }, 2800);
 }
 
-// For the prototype, reveal automatically.
-// Later this can be tied to loading the screening data.
-window.setTimeout(revealCinema, 2400);
+window.setTimeout(revealCinema, 3000);
 
 skip.addEventListener("click", revealCinema);
 
@@ -34,10 +31,5 @@ playButton.addEventListener("click", async () => {
   }
 });
 
-video.addEventListener("play", () => {
-  playButton.textContent = "Ⅱ";
-});
-
-video.addEventListener("pause", () => {
-  playButton.textContent = "▶";
-});
+video.addEventListener("play", () => playButton.textContent = "Ⅱ");
+video.addEventListener("pause", () => playButton.textContent = "▶");

@@ -3,23 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#ffffff">
   <title>CineClub H</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-  <main class="cinema" id="cinema">
-
-    <!-- The video is already underneath the intro.
-         The intro zooms away to reveal it. -->
+  <main class="cinema">
     <section class="player" aria-label="Sala de CineClub H">
       <div class="video-shell">
-        <video id="screeningVideo" playsinline preload="metadata">
-          <!-- Later:
-          <source src="movie.mp4" type="video/mp4">
-          -->
-        </video>
+        <video id="screeningVideo" playsinline preload="metadata"></video>
 
         <div class="video-placeholder">
           <div class="placeholder-label">CINECLUB H</div>
@@ -27,34 +19,30 @@
         </div>
 
         <div class="player-ui">
-          <div class="player-top">
-            <span class="live-dot"></span>
-            <span>EN VIVO</span>
-          </div>
-
+          <div class="player-top"><span class="live-dot"></span> EN VIVO</div>
           <div class="player-bottom">
             <div class="progress"><span></span></div>
             <div class="controls">
-              <button id="playButton" type="button" aria-label="Reproducir">▶</button>
+              <button id="playButton" type="button">▶</button>
               <span class="time">00:00</span>
               <span class="spacer"></span>
-              <button type="button" aria-label="Pantalla completa">⛶</button>
+              <button type="button">⛶</button>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Intro / loading state -->
     <section class="intro" id="intro" aria-label="Cargando CineClub H">
-      <div class="logo-wrap">
-        <img src="assets/cineclub-h-mark.png" alt="CineClub H">
-        <div class="scanlines"></div>
+      <div class="signal">
+        <div class="logo-wrap">
+          <img src="assets/cineclub-h-mark.png" alt="CineClub H">
+          <div class="animated-fill"></div>
+          <div class="scanlines"></div>
+          <div class="film-flicker"></div>
+        </div>
       </div>
-
-      <div class="loading">
-        <span>LOADING</span><span class="dots">...</span>
-      </div>
+      <div class="loading">LOADING<span class="dots">...</span></div>
     </section>
 
     <button class="skip" id="skipIntro" type="button">SKIP</button>
